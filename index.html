@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پروتکل قاصدک | مستندات زیرساخت توزیع خبر</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;700&display=swap');
+        body { font-family: 'Vazirmatn', sans-serif; background-color: #f8fafc; color: #334155; scroll-behavior: smooth; }
+        .section-card { background: white; border: 1px solid #e2e8f0; border-radius: 20px; padding: 2.5rem; margin-bottom: 3rem; transition: transform 0.3s ease; }
+        pre { direction: ltr; text-align: left; background: #0f172a; color: #38bdf8; padding: 1.25rem; border-radius: 12px; font-size: 0.9rem; overflow-x: auto; border-left: 6px solid #3b82f6; }
+        .badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: bold; margin-bottom: 0.5rem; }
+        .idea-box { background: #f0f9ff; border-right: 4px solid #0ea5e9; padding: 1rem; border-radius: 8px; margin-top: 1rem; }
+        .server-key { background: #fff7ed; border: 1px dashed #f97316; padding: 1rem; border-radius: 10px; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <header class="bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 text-white py-20 px-6 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-5xl font-bold mb-6">پروتکل قاصدک (Ghasedak)</h1>
+            <p class="text-xl text-slate-300 leading-relaxed">زیرساخت غیرمتمرکز و منعطف برای توزیع اخبار در شرایط محدودیت شدید شبکه و فیلترینگ</p>
+            <div class="mt-10 flex flex-wrap justify-center gap-4">
+                <a href="#intro" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-bold transition">مطالعه مستندات</a>
+                <a href="#contact" class="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-8 py-3 rounded-full font-bold transition">همکاری در پروژه</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-16">
+
+        <!-- بخش اول: معرفی و فلسفه -->
+        <section id="intro" class="section-card shadow-sm">
+            <div class="badge bg-blue-100 text-blue-700 text-sm mb-4">فلسفه پروژه</div>
+            <h2 class="text-3xl font-bold mb-6">هدف از ایجاد قاصدک چیست؟</h2>
+            <p class="text-lg leading-9 text-justify mb-6">
+                در شرایطی که دسترسی به اینترنت آزاد محدود می‌شود، پایداری جریان اطلاعات به شدت آسیب می‌بیند. <strong>پروتکل قاصدک</strong> به عنوان یک زیرساخت (Infrastructure) عمل می‌کند که اجازه می‌دهد هر کسی، در هر کجای دنیا، یک ایستگاه خبری مستقل باشد. 
+                منطق این پروژه بر پایه <strong>توزیع غیرمتمرکز</strong> است؛ به این معنا که هیچ نهاد مرکزی وجود ندارد و هر سرور می‌تواند قوانین خود را برای دریافت و ارسال خبر داشته باشد.
+            </p>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                    <h3 class="font-bold text-blue-600 mb-3"><i class="fas fa-shield-alt ml-2"></i> رمزنگاری سرتاسری (E2EE)</h3>
+                    <p class="text-sm leading-7">خبر در گوشی نویسنده قفل می‌شود و فقط در گوشی خواننده باز می‌شود. حتی مدیر سرور هم نمی‌داند چه خبری را میزبانی می‌کند.</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                    <h3 class="font-bold text-green-600 mb-3"><i class="fas fa-share-alt ml-2"></i> توزیع منعطف فایل</h3>
+                    <p class="text-sm leading-7">اخبار در قالب فایل‌های سبک SQLite روزانه بسته‌بندی می‌شوند تا از طریق بلوتوث، پیام‌رسان‌های داخلی، فلش و... به راحتی جابه‌جا شوند.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- بخش دوم: زیرساخت سرور و هاب -->
+        <section id="hub" class="section-card shadow-sm">
+            <div class="badge bg-green-100 text-green-700 text-sm mb-4">بخش سرور</div>
+            <h2 class="text-3xl font-bold mb-6">ساختار سرور مستقل (Independent Hub)</h2>
+            <p class="mb-4">هر سرور در پروتکل قاصدک یک واحد مستقل است. مدیر سرور می‌تواند انتخاب کند که دیتا را از چه طریقی دریافت کند:</p>
+            
+            <div class="space-y-6">
+                <div class="p-4 bg-blue-50 rounded-xl border-r-4 border-blue-500">
+                    <h4 class="font-bold mb-2">۱. پروتکل DNS (برای شرایط فیلترینگ شدید):</h4>
+                    <p class="text-sm">اطلاعات در قالب ساب‌دامین‌های کوچک به پورت ۵۳ سرور ارسال می‌شود. این روش برای عبور از فیلترکننده‌هایی که پورت‌های وب را می‌بندند عالی است.</p>
+                </div>
+                <div class="p-4 bg-indigo-50 rounded-xl border-r-4 border-indigo-500">
+                    <h4 class="font-bold mb-2">۲. پروتکل HTTP/Standard (برای شرایط عادی و هاستینگ):</h4>
+                    <p class="text-sm">سرور می‌تواند به صورت یک وب‌سرویس عادی عمل کند. فرستنده‌هایی که به وی‌پی‌ان یا اینترنت آزاد دسترسی دارند، دیتا را مستقیماً آپلود می‌کنند.</p>
+                </div>
+            </div>
+
+            <h3 class="font-bold mt-10 mb-4 text-orange-600"><i class="fas fa-key ml-2"></i> سیستم Server Key (رمزنگاری آفلاین)</h3>
+            <p class="text-sm mb-4 leading-7">برای پنهان ماندن آدرس IP و دامین سرور از دید فیلترکننده، مشخصات سرور هرگز به صورت متن خام منتشر نمی‌شود.</p>
+            <div class="server-key italic text-center text-orange-900">
+                GDK-V3-[Encrypted_IP_and_Domain_Information_Here]
+            </div>
+            <p class="text-xs mt-3 text-slate-500">مدیر سرور اطلاعات خود را به ادمین پروژه می‌دهد و یک کد دریافت می‌کند. کاربر با وارد کردن این کد در اپلیکیشن، بدون اینکه بداند سرور کجاست، به آن وصل می‌شود.</p>
+        </section>
+
+        <!-- بخش سوم: دیتابیس روزانه -->
+        <section class="section-card shadow-sm border-r-8 border-r-blue-500">
+            <div class="badge bg-purple-100 text-purple-700 text-sm mb-4">مدیریت دیتا</div>
+            <h2 class="text-3xl font-bold mb-6">معماری دیتابیس‌های روزانه (Daily SQLite)</h2>
+            <p class="text-sm leading-7 mb-6">یکی از نوآوری‌های قاصدک، جداسازی اخبار بر اساس تاریخ است. به جای یک دیتابیس سنگین، هر روز یک فایل جدید ساخته می‌شود. مثلاً فایل <code class="bg-gray-100 px-2 rounded">2026-04-02.sqlite</code> فقط شامل اخبار امروز است.</p>
+            
+            <pre>
+-- ساختار پیشنهادی برای پیاده‌سازان (Schema)
+CREATE TABLE ghasedak_news (
+    id INTEGER PRIMARY KEY,
+    category TEXT,      -- دسته‌بندی رمز شده
+    importance INTEGER, -- اهمیت (1 تا 5)
+    content TEXT,       -- متن رمز شده AES-256
+    author_sign TEXT,   -- امضای دیجیتال نویسنده
+    timestamp TEXT      -- زمان ثبت پکیج خبر
+);</pre>
+            <p class="mt-4 text-sm text-slate-600 italic">فایده: اگر کسی فقط اخبار امروز را بخواهد، یک فایل بسیار سبک (مثلاً ۵۰ کیلوبایت) را دریافت می‌کند که حتی با پیام‌رسان‌های داخلی هم به سرعت قابل ارسال است.</p>
+        </section>
+
+        <!-- بخش چهارم: ایده‌ها و توسعه آینده -->
+        <section id="ideas" class="section-card shadow-sm">
+            <div class="badge bg-yellow-100 text-yellow-700 text-sm mb-4">آینده پروژه</div>
+            <h2 class="text-3xl font-bold mb-6">ایده‌ها و مسیر توسعه</h2>
+            <p class="mb-4">ما پذیرای تمام ایده‌های جدید برای قدرتمندتر کردن این زیرساخت هستیم. چند ایده برای شروع:</p>
+            
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="idea-box">
+                    <h4 class="font-bold text-sm mb-1">فید خودکار (Auto-Fetcher)</h4>
+                    <p class="text-xs">اضافه کردن ماژولی که اخبار را از RSS منابع معتبر جهانی بگیرد، خودکار رمزنگاری کند و روی سرور قرار دهد.</p>
+                </div>
+                <div class="idea-box">
+                    <h4 class="font-bold text-sm mb-1">تایید هویت غیرمتمرکز</h4>
+                    <p class="text-xs">استفاده از امضای دیجیتال (Digital Signature) برای هر نویسنده تا از انتشار اخبار جعلی (Fake News) جلوگیری شود.</p>
+                </div>
+                <div class="idea-box">
+                    <h4 class="font-bold text-sm mb-1">مش محلی (Local Mesh)</h4>
+                    <p class="text-xs">قابلیت همگام‌سازی اپلیکیشن‌های گوشی‌های نزدیک به هم از طریق بلوتوث و وای‌فای داخلی به صورت خودکار.</p>
+                </div>
+                <div class="idea-box">
+                    <h4 class="font-bold text-sm mb-1">رمزنگاری لایه‌ای</h4>
+                    <p class="text-xs">استفاده از چندین لایه رمزنگاری برای پنهان کردن متا دیتای خبر (حتی ساعت دقیق انتشار).</p>
+                </div>
+            </div>
+            <p class="mt-6 text-sm font-bold text-slate-800">شما چه ایده‌ای دارید؟ زیرساخت قاصدک منعطف است و پذیرای هر تغییری می‌باشد.</p>
+        </section>
+
+        <!-- بخش تماس و همکاری -->
+        <section id="contact" class="bg-slate-900 text-white p-12 rounded-3xl text-center shadow-2xl">
+            <h2 class="text-3xl font-bold mb-6">به پروژه بپیوندید</h2>
+            <p class="text-slate-400 mb-8 max-w-2xl mx-auto leading-8">اگر توسعه‌دهنده هستید (Laravel, Flutter, Python, Go)، متخصص شبکه هستید یا ایده‌ای برای بهتر شدن پروتکل دارید، قاصدک به کمک شما نیاز دارد.</p>
+            
+            <div class="inline-flex items-center bg-blue-600 hover:bg-blue-700 px-8 py-4 rounded-full transition cursor-pointer mb-6">
+                <i class="fab fa-telegram text-2xl ml-3"></i>
+                <span class="text-xl font-bold">@saman9074</span>
+            </div>
+            
+            <p class="text-sm text-slate-500 italic">برای دریافت کلیدهای رمزنگاری سرور یا همکاری در توسعه هسته مرکزی، در تلگرام پیام دهید.</p>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-12 text-slate-400 border-t border-slate-200">
+        <p>پروتکل قاصدک | 2026</p>
+    </footer>
+
+</body>
+</html>
